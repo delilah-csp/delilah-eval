@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
- * Hermes eBPF-based PCIe Accelerator
- * Copyright(c) 2020 Eideticom, Inc.
+ * Delilah Computational Stoage Framework
+ * Copyright(c) 2022 Niclas Hedam
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms and conditions of the GNU General Public License,
@@ -18,22 +18,33 @@
  * The full GNU General Public License is included in this distribution in
  * the file called "LICENSE".
  *
- * Martin Oliveira <martin.oliveira@eideticom.com>
+ * Niclas Hedam <nhed@itu.dk>
  *
  ******************************************************************************/
 
-#ifndef HERMES_H
-#define HERMES_H
+#ifndef DELILAH_H
+#define DELILAH_H
 
 #include <linux/types.h>
 
-struct hermes_download_prog_ioctl_argp {
-	__u32 len;
-	__u64 prog;
-	__u32 flags;
+enum delilah_ops {
+	DELILAH_OP_PROG_EXEC,
+	DELILAH_OP_PROG_WRITE,
+	DELILAH_OP_DATA_READ,
+	DELILAH_OP_DATA_WRITE,
 };
 
-#define HERMES_DOWNLOAD_PROG_IOCTL    _IOW('H', 0x50, \
-		struct hermes_download_prog_ioctl_argp)
 
-#endif // HERMES_H
+struct delilah_exec {
+	__u8 eng;
+	__u8 prog_slot;
+	__u8 data_slot;
+};
+
+struct delilah_dma {
+	__u64 buf;
+	__u32 len;
+	__u8 slot;
+};
+
+#endif // DELILAH_H

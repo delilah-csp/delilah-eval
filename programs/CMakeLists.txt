@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(delilah-eval-programs)
 
 set(CMAKE_C_COMPILER "clang")
-set(CMAKE_C_FLAGS "-target bpf -c -Wno-implicit-function-declaration")
+set(CMAKE_C_FLAGS "-target bpf -c -Wno-implicit-function-declaration -O3")
 
 file(GLOB PROGRAMS "*.c")
 add_library(programs OBJECT ${PROGRAMS})
