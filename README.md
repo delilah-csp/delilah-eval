@@ -1,11 +1,11 @@
 
 # Delilah Experimental Evaluation Playground
 
-This repository contains an experimental playground for Delilah, a computational storage device built for the Daisy OpenSSD and Petalinux.
+This repository contains an experimental playground for Delilah, a Computational Storage Processor (CSP) built for the Daisy OpenSSD.
 
 ## Authors
 
-- [@niclashedam](https://www.github.com/niclashedam)
+- [Niclas Hedam](https://www.github.com/niclashedam)
 
 ## License & Funding
 
