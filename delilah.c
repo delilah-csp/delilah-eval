@@ -30,7 +30,7 @@ int delilah_write_prog(struct io_uring *ring, int fd, void *buf, size_t len) {
 }
 
 int delilah_exec_prog(struct io_uring *ring, int fd, int prog, int data,
-                      int eng) {
+                      int eng, uint32_t invalidation_size, uint32_t flush_size) {
   struct io_uring_sqe *sqe;
   struct delilah_exec *exec;
 
@@ -44,6 +44,11 @@ int delilah_exec_prog(struct io_uring *ring, int fd, int prog, int data,
   exec->prog_slot = prog;
   exec->data_slot = data;
   exec->eng = eng;
+
+  exec->invalidation_size = invalidation_size;
+  exec->invalidation_offset = 0;
+  exec->flush_size = flush_size;
+  exec->flush_offset = 0;
 
   return io_uring_submit(ring);
 }
@@ -124,7 +129,7 @@ int main() {
   io_uring_cqe_seen(&ring, cqe);
 
   // Execute versioning program on Delilah
-  delilah_exec_prog(&ring, fd, 0, 0, 0);
+  delilah_exec_prog(&ring, fd, 0, 0, 0, 0, sizeof(uint64_t));
   io_uring_wait_cqe(&ring, &cqe);
   io_uring_cqe_seen(&ring, cqe);
 
@@ -160,7 +165,7 @@ int main() {
     io_uring_cqe_seen(&ring, cqe);
 
     gettimeofday(&executing, NULL);
-    delilah_exec_prog(&ring, fd, 0, 0, 0);
+    delilah_exec_prog(&ring, fd, 0, 0, 0, sizeof(struct delilah_file_t), sizeof(struct delilah_file_t) + sizes[i] * 10);
     io_uring_wait_cqe(&ring, &cqe);
     io_uring_cqe_seen(&ring, cqe);
 
