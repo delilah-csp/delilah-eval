@@ -1,8 +1,10 @@
 #include "../delilah.h"
 #include <stdint.h>
 
-int prog(void *mem, int mem_size) {
-  struct delilah_file_t *file = (struct delilah_file_t *)mem;
+int
+prog(void* mem, int mem_size)
+{
+  struct delilah_file_t* file = (struct delilah_file_t*)mem;
 
   delilah_file_read(mem + sizeof(struct delilah_file_t), file->size,
                     file->filename);

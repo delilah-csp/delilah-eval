@@ -27,25 +27,28 @@
 
 #include <linux/types.h>
 
-enum delilah_ops {
+enum delilah_ops
+{
   DELILAH_OP_PROG_EXEC,
   DELILAH_OP_PROG_WRITE,
   DELILAH_OP_DATA_READ,
   DELILAH_OP_DATA_WRITE,
 };
 
-struct delilah_exec {
+struct delilah_exec
+{
   __u8 eng;
   __u8 prog_slot;
   __u8 data_slot;
 
-	__u32 invalidation_size;
-	__u32 invalidation_offset;
-	__u32 flush_size;
-	__u32 flush_offset;
+  __u32 invalidation_size;
+  __u32 invalidation_offset;
+  __u32 flush_size;
+  __u32 flush_offset;
 };
 
-struct delilah_dma {
+struct delilah_dma
+{
   __u64 buf;
   __u32 len;
   __u8 slot;

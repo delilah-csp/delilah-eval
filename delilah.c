@@ -10,29 +10,33 @@
 #define DATA_SIZE 1024 * 1024 * 128
 #define PROG_SIZE 1024 * 1024
 
-struct delilah_mount_t fs0 = {.nvme_handle = "nvme0n1p1",
-                              .mount_point = "/media/nvme0n1p1/",
-                              .fs_type = "ext4"};
+struct delilah_mount_t fs0 = { .nvme_handle = "nvme0n1p1",
+                               .mount_point = "/media/nvme0n1p1/",
+                               .fs_type = "ext4" };
 
-int delilah_write_prog(struct io_uring *ring, int fd, void *buf, size_t len) {
-  struct io_uring_sqe *sqe;
-  struct delilah_dma *dma;
+int
+delilah_write_prog(struct io_uring* ring, int fd, void* buf, size_t len)
+{
+  struct io_uring_sqe* sqe;
+  struct delilah_dma* dma;
   sqe = io_uring_get_sqe(ring);
 
   sqe->opcode = IORING_OP_URING_CMD;
   sqe->fd = fd;
   sqe->cmd_op = DELILAH_OP_PROG_WRITE;
 
-  dma = (struct delilah_dma *)&sqe->cmd;
+  dma = (struct delilah_dma*)&sqe->cmd;
   dma->slot = 0, dma->buf = (uint64_t)buf, dma->len = len;
 
   return io_uring_submit(ring);
 }
 
-int delilah_exec_prog(struct io_uring *ring, int fd, int prog, int data,
-                      int eng, uint32_t invalidation_size, uint32_t flush_size) {
-  struct io_uring_sqe *sqe;
-  struct delilah_exec *exec;
+int
+delilah_exec_prog(struct io_uring* ring, int fd, int prog, int data, int eng,
+                  uint32_t invalidation_size, uint32_t flush_size)
+{
+  struct io_uring_sqe* sqe;
+  struct delilah_exec* exec;
 
   sqe = io_uring_get_sqe(ring);
 
@@ -40,7 +44,7 @@ int delilah_exec_prog(struct io_uring *ring, int fd, int prog, int data,
   sqe->fd = fd;
   sqe->cmd_op = DELILAH_OP_PROG_EXEC;
 
-  exec = (struct delilah_exec *)&sqe->cmd;
+  exec = (struct delilah_exec*)&sqe->cmd;
   exec->prog_slot = prog;
   exec->data_slot = data;
   exec->eng = eng;
@@ -53,10 +57,11 @@ int delilah_exec_prog(struct io_uring *ring, int fd, int prog, int data,
   return io_uring_submit(ring);
 }
 
-int delilah_io(struct io_uring *ring, int fd, void *buf, size_t len,
-               bool write) {
-  struct io_uring_sqe *sqe;
-  struct delilah_dma *dma;
+int
+delilah_io(struct io_uring* ring, int fd, void* buf, size_t len, bool write)
+{
+  struct io_uring_sqe* sqe;
+  struct delilah_dma* dma;
 
   sqe = io_uring_get_sqe(ring);
 
@@ -64,18 +69,20 @@ int delilah_io(struct io_uring *ring, int fd, void *buf, size_t len,
   sqe->fd = fd;
   sqe->cmd_op = write ? DELILAH_OP_DATA_WRITE : DELILAH_OP_DATA_READ;
 
-  dma = (struct delilah_dma *)&sqe->cmd;
+  dma = (struct delilah_dma*)&sqe->cmd;
   dma->slot = 0, dma->buf = (uint64_t)buf, dma->len = len;
 
   return io_uring_submit(ring);
 }
 
-size_t file_read(void *buffer, size_t size, char *filename) {
+size_t
+file_read(void* buffer, size_t size, char* filename)
+{
   size_t i = 0;
   size_t fsize, rsize;
-  char *buf = (char *)buffer;
+  char* buf = (char*)buffer;
 
-  FILE *f = fopen(filename, "rb");
+  FILE* f = fopen(filename, "rb");
 
   fseek(f, 0, SEEK_END);
   fsize = ftell(f);
@@ -91,12 +98,14 @@ size_t file_read(void *buffer, size_t size, char *filename) {
   return rsize;
 }
 
-int main() {
+int
+main()
+{
   struct io_uring ring;
-  struct io_uring_cqe *cqe;
+  struct io_uring_cqe* cqe;
   struct io_uring_params p = {};
-  struct delilah_dma *dma;
-  struct delilah_exec *exec;
+  struct delilah_dma* dma;
+  struct delilah_exec* exec;
 
   char *src, *dst, *prog;
   size_t sz;
@@ -139,13 +148,13 @@ int main() {
   io_uring_cqe_seen(&ring, cqe);
 
   printf("Delilah reported itself to be of version: %ld\n\n",
-         *((uint64_t *)dst));
+         *((uint64_t*)dst));
 
   printf("Begin table with results: \n");
   printf("bytes, load, write, exec, read, v1, v2\n");
 
-  uint64_t sizes[] = {100, 1000, 10000, 100000, 1000000, 10000000};
-  struct delilah_file_t *file = (struct delilah_file_t *)src;
+  uint64_t sizes[] = { 100, 1000, 10000, 100000, 1000000, 10000000 };
+  struct delilah_file_t* file = (struct delilah_file_t*)src;
   struct timeval loading, writeing, executing, reading, done;
   struct timeval sub_load, sub_write, sub_exec, sub_read;
 
@@ -165,7 +174,8 @@ int main() {
     io_uring_cqe_seen(&ring, cqe);
 
     gettimeofday(&executing, NULL);
-    delilah_exec_prog(&ring, fd, 0, 0, 0, sizeof(struct delilah_file_t), sizeof(struct delilah_file_t) + sizes[i] * 10);
+    delilah_exec_prog(&ring, fd, 0, 0, 0, sizeof(struct delilah_file_t),
+                      sizeof(struct delilah_file_t) + sizes[i] * 10);
     io_uring_wait_cqe(&ring, &cqe);
     io_uring_cqe_seen(&ring, cqe);
 
