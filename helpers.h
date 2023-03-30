@@ -58,6 +58,34 @@ delilah_exec_prog(struct io_uring* ring, int fd, uint8_t prog, uint8_t data, uin
 }
 
 static int
+delilah_exec_prog_jit(struct io_uring* ring, int fd, uint8_t prog, uint8_t data, uint8_t eng,
+                  uint32_t invalidation_size, uint32_t flush_size)
+{
+  struct io_uring_sqe* sqe;
+  struct delilah_exec* exec;
+
+  sqe = io_uring_get_sqe(ring);
+
+  sqe->opcode = IORING_OP_URING_CMD;
+  sqe->fd = fd;
+  sqe->cmd_op = DELILAH_OP_PROG_EXEC_JIT;
+
+  exec = (struct delilah_exec*)&sqe->cmd;
+  exec->prog_slot = prog;
+  exec->data_slot = data;
+  exec->eng = eng;
+
+  exec->invalidation_size =
+    invalidation_size; // How many bytes to invalidate from the CPU cache
+  exec->invalidation_offset = 0; // Invalidation offset
+  exec->flush_size =
+    flush_size; // How many bytes to flush from the CPU cache to the DMA buffer
+  exec->flush_offset = 0; // Flush offset
+
+  return io_uring_submit(ring);
+}
+
+static int
 delilah_io(struct io_uring* ring, int fd, uint8_t slot, void* buf, size_t len,
            bool write)
 {

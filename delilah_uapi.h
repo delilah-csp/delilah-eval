@@ -33,6 +33,7 @@ enum delilah_ops
   DELILAH_OP_PROG_WRITE,
   DELILAH_OP_DATA_READ,
   DELILAH_OP_DATA_WRITE,
+  DELILAH_OP_PROG_EXEC_JIT,
 };
 
 struct delilah_exec

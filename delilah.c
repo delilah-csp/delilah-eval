@@ -48,6 +48,18 @@ main()
   printf("Multi DMA (4) latency/troughput:\n");
   experiment_dma_4(&ring, fd);
 
+  printf("TUD Filtering (BW, JIT):\n");
+  experiment_tud_filter_bw_jit(&ring, fd);
+
+  printf("TUD Filtering (BW, INT):\n");
+  experiment_tud_filter_bw_int(&ring, fd);
+
+  printf("TUD Filtering (EQ, JIT):\n");
+  experiment_tud_filter_eq_jit(&ring, fd);
+
+  printf("TUD Filtering (EQ, INT):\n");
+  experiment_tud_filter_eq_int(&ring, fd);
+
   io_uring_queue_exit(&ring);
   close(fd);
 
