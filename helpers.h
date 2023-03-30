@@ -6,6 +6,7 @@
 #include <liburing.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
 
 static int
@@ -156,6 +157,23 @@ clock_end(struct timeval start)
 
   return (end.tv_sec - start.tv_sec) +
          (end.tv_usec - start.tv_usec) / 1000000.0;
+}
+
+static inline void table_csv(ft_table_t *table){
+  /* Set custom border style */                                                      
+  struct ft_border_chars border;                                                     
+  border.top_border_ch = "";                                                        
+  border.separator_ch  = "";                                                        
+  border.bottom_border_ch  = "";                                                    
+  border.side_border_ch  = "";                                                      
+  border.out_intersect_ch  = "";                                                    
+  border.in_intersect_ch  = "";                                                     
+                                                                                    
+  struct ft_border_style border_style;                                               
+  memcpy(&border_style.border_chs, &border, sizeof(struct ft_border_chars));         
+  memcpy(&border_style.header_border_chs, &border, sizeof(struct ft_border_chars));  
+  border_style.hor_separator_char = "~";                                             
+  ft_set_border_style(table, &border_style);
 }
 
 #endif
