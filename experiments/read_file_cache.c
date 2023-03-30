@@ -33,6 +33,10 @@ experiment_read_file_cache(struct io_uring* ring, int fd)
   ft_set_cell_prop(table, 0, FT_ANY_COLUMN, FT_CPROP_ROW_TYPE, FT_ROW_HEADER);
   ft_set_cell_prop(table, FT_ANY_ROW, 0, FT_CPROP_TEXT_ALIGN, FT_ALIGNED_RIGHT);
 
+  #ifdef DELILAH_TABLE_CSV
+  table_csv(table);
+  #endif
+  
   ft_write_ln(table, "File Size", "Write Prog", "Write State", "Exec Prog",
               "Read Result", "Total Time", "V1", "V2");
 

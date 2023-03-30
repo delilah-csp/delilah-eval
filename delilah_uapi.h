@@ -27,6 +27,8 @@
 
 #include <linux/types.h>
 
+#define DELILAH_TABLE_CSV 1
+
 enum delilah_ops
 {
   DELILAH_OP_PROG_EXEC,
