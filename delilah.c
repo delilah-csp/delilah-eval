@@ -60,6 +60,9 @@ main()
   printf("TUD Filtering (EQ, INT):\n");
   experiment_tud_filter_eq_int(&ring, fd);
 
+  printf("TUD Filtering (BW, JIT, NOIO):\n");
+  experiment_tud_filter_bw_jit_noio(&ring, fd);
+
   io_uring_queue_exit(&ring);
   close(fd);
 
