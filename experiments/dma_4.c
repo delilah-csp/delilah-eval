@@ -79,8 +79,8 @@ experiment_dma_4(struct io_uring* ring, int fd)
       read_throughput_str[32], write_throughput_str[32];
 
     // Calculate throughput. Time is in ms, size is in bytes.
-    double read_throughput = sizes[i] / (read_time) / 1000000;
-    double write_throughput = sizes[i] / (write_time) / 1000000;
+    double read_throughput = 4 * sizes[i] / (read_time) / 1000000;
+    double write_throughput = 4 * sizes[i] / (write_time) / 1000000;
 
     add_units(buffer_size, sizes[i]);
     sprintf(write_time_str, "%.3f ms", write_time * 1000);
