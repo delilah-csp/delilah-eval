@@ -5,7 +5,7 @@
 #include <liburing.h>
 #include <stdint.h>
 
-#define DATA_SIZE 1024 * 1024 * 128
+#define DATA_SIZE 1024 * 1024 * 1024
 #define PROG_SIZE 1024 * 1024
 
 struct delilah_file_t

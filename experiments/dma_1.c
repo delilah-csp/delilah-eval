@@ -17,7 +17,7 @@ experiment_dma_1(struct io_uring* ring, int fd)
   dst = malloc(DATA_SIZE);
 
   uint64_t sizes[] = { 1000,     10000,
-                       100000, 1000000, 10000000, 100000000 };
+                       100000, 1000000, 10000000, 100000000, 1000000000 };
 
   ft_table_t* table = ft_create_table();
   /* Set "header" type for the first row */
@@ -31,7 +31,7 @@ experiment_dma_1(struct io_uring* ring, int fd)
   ft_write_ln(table, "Buffer Size", "Read", "Read Throughput", "Write",
               "Write Throughput");
 
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 7; i++) {
     struct timeval write = clock_start();
     int ret = delilah_io(ring, fd, 0, src, sizes[i], 1);
 
