@@ -43,7 +43,7 @@ experiment_dma_1(struct io_uring* ring, int fd)
     io_uring_wait_cqe(ring, &cqe);
     io_uring_cqe_seen(ring, cqe);
 
-    if (cqe->res) {
+    if (cqe->res < 0) {
       printf("Experiment failed (COMP, WRITE)! Error: %s\n",
              strerror(cqe->res));
       return;
@@ -62,7 +62,7 @@ experiment_dma_1(struct io_uring* ring, int fd)
     io_uring_wait_cqe(ring, &cqe);
     io_uring_cqe_seen(ring, cqe);
 
-    if (cqe->res) {
+    if (cqe->res < 0) {
       printf("Experiment failed (COMP, READ)! Error: %s\n", strerror(cqe->res));
       return;
     }
