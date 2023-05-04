@@ -2,6 +2,7 @@
 #define EXPERIMENTS_H
 
 void experiment_version(struct io_uring* ring, int fd);
+void experiment_bench(struct io_uring* ring, int fd);
 void experiment_read_file(struct io_uring* ring, int fd);
 void experiment_read_file_cache(struct io_uring* ring, int fd);
 void experiment_cmb(struct io_uring* ring, int fd);

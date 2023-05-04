@@ -33,6 +33,9 @@ main()
   experiment_version(&ring, fd);
   printf("\n");
 
+  printf("Calling Bench on Delilah. No output on Host.\n\n");
+  experiment_bench(&ring, fd);
+
   printf("Reading files:\n");
   experiment_read_file(&ring, fd);
 
