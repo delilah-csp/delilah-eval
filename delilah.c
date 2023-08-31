@@ -33,14 +33,29 @@ main()
   experiment_version(&ring, fd);
   printf("\n");
 
-  printf("Calling Bench on Delilah. No output on Host.\n\n");
-  experiment_bench(&ring, fd);
-
-  printf("Reading files:\n");
-  experiment_read_file(&ring, fd);
+//  printf("Reading files:\n");
+//  experiment_read_file(&ring, fd);
 
   printf("Reading files with strategic cache coherency:\n");
   experiment_read_file_cache(&ring, fd);
+
+//  printf("Reading raw with strategic cache coherency:\n");
+//  experiment_read_raw(&ring, fd);
+
+  printf("Reading files O_DIRECT + malloc with strategic cache coherency:\n");
+  experiment_read_file_direct(&ring, fd);
+
+//  printf("Reading raw O_DIRECT + malloc with strategic cache coherency:\n");
+//  experiment_read_raw_direct(&ring, fd);
+
+  printf("Reading files O_DIRECT w/o malloc with strategic cache coherency:\n");
+  experiment_read_file_direct_noncpy(&ring, fd);
+
+//  printf("Reading raw O_DIRECT w/o malloc with strategic cache coherency:\n");
+//  experiment_read_raw_direct_noncpy(&ring, fd);
+
+
+  return 0;
 
   printf("CMB latency/troughput:\n");
   experiment_cmb(&ring, fd);

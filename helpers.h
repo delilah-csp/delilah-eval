@@ -36,6 +36,20 @@ delilah_exec_prog(struct io_uring* ring, int fd, uint8_t prog, uint8_t data, uin
 {
   struct io_uring_sqe* sqe;
   struct delilah_exec* exec;
+  struct delilah_clear_cache* clear_cache;
+  struct io_uring_cqe* cqe;
+
+  sqe = io_uring_get_sqe(ring);
+  sqe->opcode = IORING_OP_URING_CMD;
+  sqe->fd = fd;
+  sqe->cmd_op = DELILAH_OP_CLEAR_CACHE;
+
+  clear_cache = (struct delilah_clear_cache*)&sqe->cmd;
+  clear_cache->eng = eng;
+
+  io_uring_submit(ring);
+  io_uring_wait_cqe(ring, &cqe);
+  io_uring_cqe_seen(ring, cqe);
 
   sqe = io_uring_get_sqe(ring);
 

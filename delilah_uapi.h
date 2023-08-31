@@ -29,17 +29,16 @@
 
 #define DELILAH_TABLE_CSV 1
 
-enum delilah_ops
-{
+enum delilah_ops {
   DELILAH_OP_PROG_EXEC,
   DELILAH_OP_PROG_WRITE,
   DELILAH_OP_DATA_READ,
   DELILAH_OP_DATA_WRITE,
   DELILAH_OP_PROG_EXEC_JIT,
+  DELILAH_OP_CLEAR_CACHE
 };
 
-struct delilah_exec
-{
+struct delilah_exec {
   __u8 eng;
   __u8 prog_slot;
   __u8 data_slot;
@@ -50,11 +49,22 @@ struct delilah_exec
   __u32 flush_offset;
 };
 
-struct delilah_dma
-{
+struct delilah_dma {
   __u64 buf;
   __u32 len;
+  __u32 offset;
   __u8 slot;
 };
+
+struct delilah_clear_cache {
+        __u8 eng;
+};
+
+struct delilah_state {
+  int fd;
+  struct io_uring data_ring;
+  struct io_uring exec_ring;
+};
+
 
 #endif // DELILAH_H
